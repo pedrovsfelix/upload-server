@@ -1,19 +1,24 @@
-import { env } from '@/env'
 import { fastifyCors } from '@fastify/cors'
 import fastifyMultipart from '@fastify/multipart'
 import fastifySwagger from '@fastify/swagger'
-import { fastify } from 'fastify'
-import { serializerCompiler, validatorCompiler, hasZodFastifySchemaValidationErrors, jsonSchemaTransform } from 'fastify-type-provider-zod'
-import { uploadImageRoute } from './routes/upload_image'
 import fastifySwaggerUi from '@fastify/swagger-ui'
+import { fastify } from 'fastify'
+import {
+  hasZodFastifySchemaValidationErrors,
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
+import { env } from '@/env'
+import { uploadImageRoute } from './routes/upload_image'
+import { transformSwaggerSchema } from './transform-swagger-schema'
 
 const server = fastify()
 
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
 
-server.setErrorHandler(( error, request, reply ) => {
-  if(hasZodFastifySchemaValidationErrors(error)) {
+server.setErrorHandler((error, request, reply) => {
+  if (hasZodFastifySchemaValidationErrors(error)) {
     return reply.status(400).send({
       message: 'Validation error',
       issues: error.validation,
@@ -37,7 +42,7 @@ server.register(fastifySwagger, {
       version: '1.0.0',
     },
   },
-  transform: jsonSchemaTransform,
+  transform: transformSwaggerSchema,
 })
 
 server.register(fastifySwaggerUi, {
