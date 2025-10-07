@@ -7,9 +7,17 @@
   "scripts": {
     "dev": "tsx watch --env-file .env src/infra/http/server.ts",
     "test": "dotenv -e .env.test -- vitest run",
-    "test:watch": "dotenv -e .env.test -- vitest"
+    "test:watch": "dotenv -e .env.test -- vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:migrate:test": "dotenv -e .env.test -- drizzle-kit migrate",
+    "pretest": "yarn db:migrate:test",
+    "pretest:watch": "yarn db:migrate:test"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.901.0",
+    "@aws-sdk/lib-storage": "^3.903.0",
     "@fastify/cors": "^11.1.0",
     "@fastify/multipart": "^9.2.1",
     "@fastify/swagger": "^9.5.2",
@@ -17,6 +25,8 @@
     "drizzle-orm": "^0.44.6",
     "fastify": "^5.6.1",
     "fastify-type-provider-zod": "^6.0.0",
+    "postgres": "^3.4.7",
+    "uuidv7": "^1.0.2",
     "zod": "^4.1.11"
   },
   "devDependencies": {
