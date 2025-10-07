@@ -7,5 +7,5 @@ export default {
   },
   dialect: 'postgresql',
   schema: 'src/infra/db/schemas/*',
-  out: 'src/infra/db/migrations/*',
+  out: 'src/infra/db/migrations',
 } satisfies Config
